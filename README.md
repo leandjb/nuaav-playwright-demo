@@ -57,6 +57,7 @@ npm install
 ### Run All tests:
 ```
 npx playwright test
+npx playwright install 
 ```
 
 ### Run Specific test file:
@@ -86,10 +87,20 @@ This reduces code duplication and makes locator updates easier to manage across 
 * Max Test Timeout (18 seconds): Selected as an upper bound to prevent excessively long test runs that could frustrate users during actual application interactions and to fail fast on genuine performance issues.
 
 ## Test Isolation:
-* I selected podman container strategy with a node custom-container with Gemini
+* I selected podman/docker container strategy with a node.js custom-image with Gemini
+* Create Custom Image:
 ```
-podman build -f .containerfile -t node-playwright-gemini .
+podman build -f .containerfile -t playwright-gemini-image .
 ```
+* Create Container:
+```
+podman run -d -it --name qa-pw-pod playwright-gemini-image:latest bash
+```
+* Enter to Container:
+```
+podman exec -d -it qa-pw-pod bash
+```
+
 ## AI Assistant implement:
 * Gemini CLI was selected as the LLM provider, integrated with Playwright CLI and MCP (Model Context Protocol) for intelligent test generation, debugging assistance, and documentation support.
 

@@ -2,9 +2,7 @@ FROM docker.io/library/node:24-trixie-slim
 
 
 WORKDIR /app
-COPY package*.json ./
-COPY tests/ ./
-
+COPY . ./
 
 RUN npm ci
 
