@@ -1,0 +1,55 @@
+{
+    standard_user: {
+      username: 'standard_user',
+      password: 'secret_sauce',
+      description: 'Standard user with full access',
+      expectedResult: 'success',
+      expectedUrl: 'https: //www.saucedemo.com/inventory.html',
+      expectedTitle: 'Swag Labs'
+    },
+    locked_out_user: {
+      username: 'locked_out_user',
+      password: 'secret_sauce',
+      description: 'User account is locked out',
+      expectedResult: 'error',
+      expectedError: 'Sorry, this user has been locked out',
+      expectedUrl: 'https: //www.saucedemo.com/'
+    },
+    problem_user: {
+      username: 'problem_user',
+      password: 'secret_sauce',
+      description: 'User with broken images/UI issues',
+      expectedResult: 'success',
+      expectedUrl: 'https: //www.saucedemo.com/inventory.html',
+      expectedTitle: 'Swag Labs',
+      hasUIIssues: true
+    },
+    performance_glitch_user: {
+      username: 'performance_glitch_user',
+      password: 'secret_sauce',
+      description: 'User experiencing performance delays',
+      expectedResult: 'success',
+      expectedUrl: 'https: //www.saucedemo.com/inventory.html',
+      expectedTitle: 'Swag Labs',
+      hasPerformanceIssues: true,
+      expectedLoginDelay: 3000 // milliseconds
+    },
+    error_user: {
+      username: 'error_user',
+      password: 'secret_sauce',
+      description: 'User with checkout errors',
+      expectedResult: 'success',
+      expectedUrl: 'https: //www.saucedemo.com/inventory.html',
+      expectedTitle: 'Swag Labs',
+      hasCheckoutIssues: true
+    },
+    visual_user: {
+      username: 'visual_user',
+      password: 'secret_sauce',
+      description: 'User with visual rendering issues',
+      expectedResult: 'success',
+      expectedUrl: 'https: //www.saucedemo.com/inventory.html',
+      expectedTitle: 'Swag Labs',
+      hasVisualIssues: true
+    }
+};
