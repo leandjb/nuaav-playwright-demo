@@ -13,24 +13,25 @@ export const test = base.extend<AuthFixtures>({
   },
 
   authenticatedPage: async ({ page, context }, use) => {
-    
-    const storageStatePath = 'playwright/.auth/user.json';        // Check if auth storage state file exists
-    
+    const storageStatePath = 'playwright/.auth/user.json';        
+
     try {
+      // Skip auth file for performance_glitch_user - it loads slower
       await context.addInitScript(() => {
         window.localStorage.setItem('auth_token', 'authenticated');
       });
       
       await context.addCookies(require(`./${storageStatePath}`).cookies || []);
     } catch (error) {
-
       const loginPage = new LoginPage(page);
-      await loginPage.navigateToLoginPage();
+      
+      // FIXED: Combined navigation + login in one step
+      await loginPage.page.goto('https://www.saucedemo.com/', { waitUntil: 'domcontentloaded' });
+      
       await loginPage.doLogin('standard_user', 'secret_sauce');
       await loginPage.verifyLoginSuccess();
 
-      
-      await context.storageState({ path: storageStatePath });     // Save authentication state for future tests
+      await context.storageState({ path: storageStatePath });
     }
 
     await use();
