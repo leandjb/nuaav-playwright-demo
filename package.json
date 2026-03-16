@@ -1,0 +1,23 @@
+{
+  "name": "nuaav-playwright-demo",
+  "version": "1.0.0",
+  "description": "This is a e2e test suite using Playwright framework for validates www.saucedemo.com",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leandjb/nuaav-playwright-demo.git"
+  },
+  "keywords": [],
+  "author": "Leandro Barros <ingleandrobarros@outlook.com>",
+  "license": "MIT",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/leandjb/nuaav-playwright-demo/issues"
+  },
+  "homepage": "https://github.com/leandjb/nuaav-playwright-demo#readme",
+  "devDependencies": {
+    "@playwright/test": "1.58.2",
+    "@types/node": "25.5.0"
+  }
+}
