@@ -44,5 +44,6 @@ export class LoginPage {
   async clearFields() {
     await this.username_textbox.clear();
     await this.password_textbox.clear();
+    
   }
 }

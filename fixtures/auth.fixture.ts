@@ -13,25 +13,24 @@ export const test = base.extend<AuthFixtures>({
   },
 
   authenticatedPage: async ({ page, context }, use) => {
-    // Check if auth storage state file exists
-    const storageStatePath = 'playwright/.auth/user.json';
+    
+    const storageStatePath = 'playwright/.auth/user.json';        // Check if auth storage state file exists
     
     try {
       await context.addInitScript(() => {
         window.localStorage.setItem('auth_token', 'authenticated');
       });
       
-      // Load saved authentication state
       await context.addCookies(require(`./${storageStatePath}`).cookies || []);
     } catch (error) {
-      // If no saved state, perform login
+
       const loginPage = new LoginPage(page);
       await loginPage.navigateToLoginPage();
       await loginPage.doLogin('standard_user', 'secret_sauce');
       await loginPage.verifyLoginSuccess();
 
-      // Save authentication state for future tests
-      await context.storageState({ path: storageStatePath });
+      
+      await context.storageState({ path: storageStatePath });     // Save authentication state for future tests
     }
 
     await use();

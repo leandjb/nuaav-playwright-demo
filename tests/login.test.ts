@@ -1,7 +1,7 @@
 import { test, expect } from '../fixtures/auth.fixture';
 import { LoginPage } from '../pages/login.page';
 
-test.describe('Login - Positive Test:', () => {
+test.describe('Login - Positive Test', () => {
   test.beforeEach(async ({ page }) => {
     const loginPage = new LoginPage(page);
     await loginPage.navigateToLoginPage();
