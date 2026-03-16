@@ -58,9 +58,9 @@ const SAUCE_DEMO_USERS = {
   }
 };
 
-test.describe('USER TYPE TESTCASE', () => {
+test.describe('@USERTYPE TESTCASE', () => {
 
-  test.describe('Standard User Tests', () => {
+  test.describe('@Standard_User Tests', () => {
 
     test('should login successfully with standard_user', async ({ loginPage }) => {
       const user = SAUCE_DEMO_USERS.standard_user;
@@ -119,7 +119,7 @@ test.describe('USER TYPE TESTCASE', () => {
     });
   });
 
-  test.describe('Locked Out User Tests', () => {
+  test.describe('@Locked_Out_User Tests', () => {
 
     test('should display locked out error for locked_out_user', async ({ loginPage }) => {
       const user = SAUCE_DEMO_USERS.locked_out_user;
@@ -165,7 +165,7 @@ test.describe('USER TYPE TESTCASE', () => {
     });
   });
 
-  test.describe('Problem User Tests', () => {
+  test.describe('@Problem_User Tests', () => {
 
     test('should login successfully with problem_user', async ({ loginPage }) => {
       const user = SAUCE_DEMO_USERS.problem_user;
@@ -224,7 +224,7 @@ test.describe('USER TYPE TESTCASE', () => {
     });
   });
 
-  test.describe('Performance Glitch User Tests', () => {
+  test.describe('@Performance_Glitch_User Tests', () => {
 
     test('should login successfully with performance_glitch_user', async ({ loginPage }) => {
       const user = SAUCE_DEMO_USERS.performance_glitch_user;
@@ -293,9 +293,9 @@ test.describe('USER TYPE TESTCASE', () => {
     });
   });
 
-  test.describe('Error User Tests', () => {
+  test.describe('@Error_User Tests', () => {
 
-    test('should login successfully with error_user', async ({ loginPage }) => {
+    test('should login successfully with error_user @smoke', async ({ loginPage }) => {
       const user = SAUCE_DEMO_USERS.error_user;
 
       await loginPage.navigateToLoginPage();
@@ -366,7 +366,7 @@ test.describe('USER TYPE TESTCASE', () => {
     });
   });
 
-  test.describe('Visual User Tests', () => {
+  test.describe('@Visual_User Tests', () => {
 
     test('should login successfully with visual_user', async ({ loginPage }) => {
       const user = SAUCE_DEMO_USERS.visual_user;

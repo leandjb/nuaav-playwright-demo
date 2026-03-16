@@ -1,7 +1,7 @@
 import { test, expect } from '../fixtures/auth.fixture';
 import { LoginPage } from '../pages/login.page';
 
-test.describe('VISUAL TESTCASE', () => {
+test.describe('@VISUAL TESTCASE', () => {
 
   test.describe('Input Field Visual States', () => {
 

@@ -4,7 +4,7 @@ import { CartPage } from '../pages/cart.page';
 import { ProductDetailPage } from '../pages/product-detail.page';
 import { CheckoutPage } from '../pages/checkout.page';
 
-test.describe('INVENTORY TESTCASE', () => {
+test.describe('@INVENTORY TESTCASE', () => {
     test.describe('Positive Scenario', () => {
 
         test('should display all products and add to cart successfully @smoke', async ({ authenticatedPage, page }) => {

@@ -1,7 +1,7 @@
 import { test, expect } from '../fixtures/auth.fixture';
 import { LoginPage } from '../pages/login.page';
 
-test.describe('LOGIN TESTCASE', () => {
+test.describe('@LOGIN TESTCASE', () => {
   test.describe('Positive Scenario', () => {
     test.beforeEach(async ({ page }) => {
       const loginPage = new LoginPage(page);
