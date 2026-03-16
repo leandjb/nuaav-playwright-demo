@@ -5,8 +5,6 @@ WORKDIR /app
 COPY package*.json ./
 COPY tests/ ./
 
-            # TODO: TEST CASES FILES IS MISSING 
-
 
 RUN npm ci
 
@@ -15,7 +13,6 @@ RUN npm install -g @google/gemini-cli
 RUN npm install -g @playwright/cli@latest
 RUN npm install
 RUN npx playwright install 
+RUN npx playwright test
 
-
-EXPOSE 3000
 CMD ["sh"]
