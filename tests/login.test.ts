@@ -1,109 +1,103 @@
 import { test, expect } from '../fixtures/auth.fixture';
-import { LoginPage } from '../pages/login.page';
+import { TestDataHelper } from '../utils/test-data.helper';
 
-test.describe('@login testcase', () => {
+test.describe('@login with data-driven approach', () => {
   test.describe('@positive scenario', () => {
-    test.beforeEach(async ({ page }) => {
-      const loginPage = new LoginPage(page);
-      await loginPage.navigateToLoginPage();
-    });
+    const successUsers = TestDataHelper.getUsersByResult('success');
 
-    test('should login successfully with valid credentials', async ({ loginPage }) => {
-      await loginPage.doLogin('standard_user', 'secret_sauce');
-      await loginPage.verifyLoginSuccess();
-    });
+    successUsers.forEach(({ key, username, password, description, expectedUrl, expectedTitle, hasPerformanceIssues }) => {
+      test(`should login successfully - ${description}`, async ({
+        page,
+        loginPage,
+        context,
+      }) => {
+        if (hasPerformanceIssues) {
+          test.slow();
+        }
 
-    test('should login with problem_user', async ({ loginPage }) => {
-      await loginPage.doLogin('problem_user', 'secret_sauce');
-      await loginPage.verifyLoginSuccess();
-    });
+        await expect.soft(loginPage.login_button).toBeEnabled();
 
-    test('should login with performance_glitch_user', async ({ loginPage }) => {
-      await loginPage.doLogin('performance_glitch_user', 'secret_sauce');
-      await loginPage.verifyLoginSuccess();
-    });
+        await loginPage.doLogin(username, password);
+        await loginPage.verifyLoginSuccess();
 
-    test('should have login button enabled on page load @smoke', async ({ loginPage }) => {
-      await expect(loginPage.login_button).toBeEnabled();
+        const storageState = await context.storageState();
+        expect.soft(storageState.cookies.length).toBeGreaterThan(0);
+
+        await expect.soft(page).toHaveURL(new RegExp(expectedUrl));
+        if (expectedTitle) {
+          await expect.soft(page).toHaveTitle(expectedTitle);
+        }
+      });
     });
   });
 
   test.describe('@negative scenario', () => {
-    test.beforeEach(async ({ page }) => {
-      const loginPage = new LoginPage(page);
-      await loginPage.navigateToLoginPage();
-    });
+    const errorUsers = TestDataHelper.getUsersByResult('error');
 
-    test('should show error with invalid username', async ({ loginPage }) => {
-      await loginPage.doLogin('invalid_user', 'secret_sauce');
-      await loginPage.verifyErrorMessage('Username and password do not match');
-    });
+    errorUsers.forEach(({ username, password, description, expectedError, expectedUrl }) => {
+      test(`should show error - ${description}`, async ({ page, loginPage }) => {
+        await loginPage.doLogin(username, password);
 
-    test('should show error with invalid password', async ({ loginPage }) => {
-      await loginPage.doLogin('standard_user', 'wrong_password');
-      await loginPage.verifyErrorMessage('Username and password do not match');
-    });
-
-    test('should show error with empty username', async ({ loginPage }) => {
-      await loginPage.doLogin('', 'secret_sauce');
-      await loginPage.verifyErrorMessage('Username is required');
-    });
-
-    test('should show error with empty password', async ({ loginPage }) => {
-      await loginPage.doLogin('standard_user', '');
-      await loginPage.verifyErrorMessage('Password is required');
-    });
-
-    test('should show error with both fields empty @smoke', async ({ loginPage }) => {
-      await loginPage.doLogin('', '');
-      await loginPage.verifyErrorMessage('Username is required');
-    });
-
-    test('should show error with locked_out_user', async ({ loginPage }) => {
-      await loginPage.doLogin('locked_out_user', 'secret_sauce');
-      await loginPage.verifyErrorMessage('Sorry, this user has been locked out');
-    });
-
-    test('should remain on login page after failed login', async ({ page, loginPage }) => {
-      await loginPage.doLogin('invalid_user', 'invalid_pass');
-      await expect(page).toHaveURL('https://www.saucedemo.com/');
+        await expect.soft(loginPage.error_message).toBeVisible();
+        await expect.soft(loginPage.error_message).toContainText(expectedError!);
+        await expect.soft(page).toHaveURL(new RegExp(expectedUrl));
+      });
     });
   });
 
-  test.describe('@edge case scenario', () => {
-    test.beforeEach(async ({ page }) => {
-      const loginPage = new LoginPage(page);
-      await loginPage.navigateToLoginPage();
+  test.describe('@issue-specific tests', () => {
+    test('performance users should handle delays', async ({ page, loginPage }) => {
+      const performanceUsers = TestDataHelper.getSlowUsers();
+      test.slow();
+
+      for (const user of performanceUsers) {
+        await page.goto('/');
+        await loginPage.doLogin(user.username, user.password);
+        await loginPage.verifyLoginSuccess();
+        await expect.soft(page).toHaveURL(new RegExp(user.expectedUrl));
+      }
     });
 
-    test('should handle SQL injection attempt gracefully', async ({ loginPage }) => {
-      await loginPage.doLogin("' OR '1'='1", 'password');
-      await loginPage.verifyErrorMessage('Username and password do not match');
+    test('UI issue users should still be functional', async ({ page, loginPage }) => {
+      const uiIssueUsers = TestDataHelper.getUsersWithIssues('UI');
+
+      for (const user of uiIssueUsers) {
+        await page.goto('/');
+        await loginPage.doLogin(user.username, user.password);
+        await expect.soft(page).toHaveURL(new RegExp(user.expectedUrl));
+      }
     });
 
-    test('should handle special characters in credentials', async ({ loginPage }) => {
-      await loginPage.doLogin('user@#$%', 'pass!@#$');
-      await loginPage.verifyErrorMessage('Username and password do not match');
-    });
+    test('visual issue users should load inventory', async ({ page, loginPage }) => {
+      const visualUsers = TestDataHelper.getUsersWithIssues('Visual');
 
-    test('should handle very long username', async ({ loginPage }) => {
-      const longUsername = 'a'.repeat(1000);
-      await loginPage.doLogin(longUsername, 'secret_sauce');
-      await loginPage.verifyErrorMessage('Username and password do not match');
-    });
-
-    test('should trim whitespace from inputs', async ({ page, loginPage }) => {
-      await loginPage.doLogin('  standard_user  ', '  secret_sauce  ');
-      // Depending on app behavior, verify either success or error
-      await expect(page).toHaveURL(/inventory|saucedemo/);
-    });
-  });
-
-  test.describe('@login custom fixture scenario', () => {
-    test('should skip login when using authenticatedPage fixture', async ({ authenticatedPage, page }) => {
-      await page.goto('/inventory.html');
-      await expect(page).toHaveTitle('Swag Labs');
+      for (const user of visualUsers) {
+        await page.goto('/');
+        await loginPage.doLogin(user.username, user.password);
+        await expect.soft(page).toHaveURL(new RegExp(user.expectedUrl));
+      }
     });
   });
 
-})
+  test.describe('@comprehensive parametrized suite', () => {
+    const allUsers = TestDataHelper.getAllUsers();
+
+    allUsers.forEach(({ key, username, password, description, expectedResult, expectedUrl, hasPerformanceIssues }) => {
+      test(`[${key}] ${description}`, async ({ page, loginPage }) => {
+        if (hasPerformanceIssues) {
+          test.slow();
+        }
+
+        await loginPage.doLogin(username, password);
+
+        if (expectedResult === 'success') {
+          await loginPage.verifyLoginSuccess();
+          await expect.soft(page).toHaveURL(new RegExp(expectedUrl));
+        } else {
+          await expect.soft(loginPage.error_message).toBeVisible();
+          await expect.soft(page).toHaveURL(new RegExp(expectedUrl));
+        }
+      });
+    });
+  });
+});

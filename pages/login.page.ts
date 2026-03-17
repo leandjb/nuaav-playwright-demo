@@ -16,7 +16,7 @@ export class LoginPage {
   }
 
   async navigateToLoginPage() {
-    await this.page.goto('https://www.saucedemo.com');
+    await this.page.goto('/');
     await this.page.waitForLoadState('domcontentloaded');
   }
 
@@ -30,10 +30,10 @@ export class LoginPage {
 
   async verifyLoginSuccess() {
     await this.page.waitForLoadState('domcontentloaded');
-    await this.page.waitForURL('https://www.saucedemo.com/inventory.html');
+    await this.page.waitForURL('/inventory.html');
 
     await expect(this.page).toHaveTitle('Swag Labs');
-    await expect(this.page).toHaveURL('https://www.saucedemo.com/inventory.html');
+    await expect(this.page).toHaveURL('/inventory.html');
   }
 
   async verifyErrorMessage(expectedMessage: string) {
