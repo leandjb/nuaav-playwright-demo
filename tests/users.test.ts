@@ -1,66 +1,9 @@
 import { test, expect } from '../fixtures/auth.fixture';
 import { LoginPage } from '../pages/login.page';
-import users from '../test-data/sauce-demo-users.json';
+import SAUCE_DEMO_USERS from '../test-data/sauce-demo-users.json';
 
-const SAUCE_DEMO_USERS = {
-  standard_user: {
-    username: 'standard_user',
-    password: 'secret_sauce',
-    description: 'Standard user with full access',
-    expectedResult: 'success',
-    expectedUrl: 'https://www.saucedemo.com/inventory.html',
-    expectedTitle: 'Swag Labs'
-  },
-  locked_out_user: {
-    username: 'locked_out_user',
-    password: 'secret_sauce',
-    description: 'User account is locked out',
-    expectedResult: 'error',
-    expectedError: 'Sorry, this user has been locked out',
-    expectedUrl: 'https://www.saucedemo.com/'
-  },
-  problem_user: {
-    username: 'problem_user',
-    password: 'secret_sauce',
-    description: 'User with broken images/UI issues',
-    expectedResult: 'success',
-    expectedUrl: 'https://www.saucedemo.com/inventory.html',
-    expectedTitle: 'Swag Labs',
-    hasUIIssues: true
-  },
-  performance_glitch_user: {
-    username: 'performance_glitch_user',
-    password: 'secret_sauce',
-    description: 'User experiencing performance delays',
-    expectedResult: 'success',
-    expectedUrl: 'https://www.saucedemo.com/inventory.html',
-    expectedTitle: 'Swag Labs',
-    hasPerformanceIssues: true,
-    expectedLoginDelay: 3000 // milliseconds
-  },
-  error_user: {
-    username: 'error_user',
-    password: 'secret_sauce',
-    description: 'User with checkout errors',
-    expectedResult: 'success',
-    expectedUrl: 'https://www.saucedemo.com/inventory.html',
-    expectedTitle: 'Swag Labs',
-    hasCheckoutIssues: true
-  },
-  visual_user: {
-    username: 'visual_user',
-    password: 'secret_sauce',
-    description: 'User with visual rendering issues',
-    expectedResult: 'success',
-    expectedUrl: 'https://www.saucedemo.com/inventory.html',
-    expectedTitle: 'Swag Labs',
-    hasVisualIssues: true
-  }
-};
-
-test.describe('@USERTYPE TESTCASE', () => {
-
-  test.describe('@Standard_User Tests', () => {
+test.describe('@login @usertype testcase', () => {
+  test.describe('@standard_user tests', () => {
 
     test('should login successfully with standard_user', async ({ loginPage }) => {
       const user = SAUCE_DEMO_USERS.standard_user;
@@ -119,9 +62,9 @@ test.describe('@USERTYPE TESTCASE', () => {
     });
   });
 
-  test.describe('@Locked_Out_User Tests', () => {
+  test.describe('@locked_out_user tests', () => {
 
-    test('should display locked out error for locked_out_user', async ({ loginPage }) => {
+    test('should display locked out error for locked_out_user @smoke', async ({ loginPage }) => {
       const user = SAUCE_DEMO_USERS.locked_out_user;
 
       await loginPage.navigateToLoginPage();
@@ -165,7 +108,7 @@ test.describe('@USERTYPE TESTCASE', () => {
     });
   });
 
-  test.describe('@Problem_User Tests', () => {
+  test.describe('@problem_user tests', () => {
 
     test('should login successfully with problem_user', async ({ loginPage }) => {
       const user = SAUCE_DEMO_USERS.problem_user;
@@ -224,7 +167,7 @@ test.describe('@USERTYPE TESTCASE', () => {
     });
   });
 
-  test.describe('@Performance_Glitch_User Tests', () => {
+  test.describe('@performance_glitch_user tests', () => {
 
     test('should login successfully with performance_glitch_user', async ({ loginPage }) => {
       const user = SAUCE_DEMO_USERS.performance_glitch_user;
@@ -237,8 +180,9 @@ test.describe('@USERTYPE TESTCASE', () => {
 
       await loginPage.verifyLoginSuccess();
 
-
-      console.log(`Login time for ${user.username}: ${loginTime}ms`);
+      // console.log(`Login time for ${user.username}: ${loginTime}ms`);
+      await loginPage.page.waitForLoadState('domcontentloaded');
+      await expect(loginPage.page).toHaveURL(user.expectedUrl);
     });
 
     test('should experience login delay with performance_glitch_user', async ({ loginPage }) => {
@@ -252,6 +196,8 @@ test.describe('@USERTYPE TESTCASE', () => {
       const totalTime = Date.now() - startTime;
 
       expect(totalTime).toBeGreaterThan(user.expectedLoginDelay);
+      await loginPage.page.waitForLoadState('domcontentloaded');
+      await expect(loginPage.page).toHaveURL(user.expectedUrl);
     });
 
     test('should eventually reach inventory page for performance_glitch_user', async ({ loginPage }) => {
@@ -293,7 +239,7 @@ test.describe('@USERTYPE TESTCASE', () => {
     });
   });
 
-  test.describe('@Error_User Tests', () => {
+  test.describe('@error_user tests', () => {
 
     test('should login successfully with error_user @smoke', async ({ loginPage }) => {
       const user = SAUCE_DEMO_USERS.error_user;
@@ -355,7 +301,7 @@ test.describe('@USERTYPE TESTCASE', () => {
       await expect(loginPage.page).toHaveURL(/cart.html/);
     });
 
-    test('error_user may experience checkout issues (known bug)', async ({ loginPage }) => {
+    test('error_user may experience checkout issues', async ({ loginPage }) => {
       const user = SAUCE_DEMO_USERS.error_user;
 
       await loginPage.navigateToLoginPage();
@@ -366,9 +312,9 @@ test.describe('@USERTYPE TESTCASE', () => {
     });
   });
 
-  test.describe('@Visual_User Tests', () => {
+  test.describe('@visual_user tests', () => {
 
-    test('should login successfully with visual_user', async ({ loginPage }) => {
+    test('should login successfully with visual_user @smoke', async ({ loginPage }) => {
       const user = SAUCE_DEMO_USERS.visual_user;
 
       await loginPage.navigateToLoginPage();

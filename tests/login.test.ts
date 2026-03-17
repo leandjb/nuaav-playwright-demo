@@ -1,8 +1,8 @@
 import { test, expect } from '../fixtures/auth.fixture';
 import { LoginPage } from '../pages/login.page';
 
-test.describe('@LOGIN TESTCASE', () => {
-  test.describe('Positive Scenario', () => {
+test.describe('@login testcase', () => {
+  test.describe('@positive scenario', () => {
     test.beforeEach(async ({ page }) => {
       const loginPage = new LoginPage(page);
       await loginPage.navigateToLoginPage();
@@ -23,12 +23,12 @@ test.describe('@LOGIN TESTCASE', () => {
       await loginPage.verifyLoginSuccess();
     });
 
-    test('should have login button enabled on page load', async ({ loginPage }) => {
+    test('should have login button enabled on page load @smoke', async ({ loginPage }) => {
       await expect(loginPage.login_button).toBeEnabled();
     });
   });
 
-  test.describe('Negative Scenario', () => {
+  test.describe('@negative scenario', () => {
     test.beforeEach(async ({ page }) => {
       const loginPage = new LoginPage(page);
       await loginPage.navigateToLoginPage();
@@ -54,7 +54,7 @@ test.describe('@LOGIN TESTCASE', () => {
       await loginPage.verifyErrorMessage('Password is required');
     });
 
-    test('should show error with both fields empty', async ({ loginPage }) => {
+    test('should show error with both fields empty @smoke', async ({ loginPage }) => {
       await loginPage.doLogin('', '');
       await loginPage.verifyErrorMessage('Username is required');
     });
@@ -70,7 +70,7 @@ test.describe('@LOGIN TESTCASE', () => {
     });
   });
 
-  test.describe('Edge-Case Scenario', () => {
+  test.describe('@edge case scenario', () => {
     test.beforeEach(async ({ page }) => {
       const loginPage = new LoginPage(page);
       await loginPage.navigateToLoginPage();
@@ -99,9 +99,9 @@ test.describe('@LOGIN TESTCASE', () => {
     });
   });
 
-  test.describe('Auth custom Fixture Scenario', () => {
+  test.describe('@login custom fixture scenario', () => {
     test('should skip login when using authenticatedPage fixture', async ({ authenticatedPage, page }) => {
-      await page.goto('https://www.saucedemo.com/inventory.html');
+      await page.goto('/inventory.html');
       await expect(page).toHaveTitle('Swag Labs');
     });
   });

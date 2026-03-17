@@ -4,8 +4,8 @@ import { CartPage } from '../pages/cart.page';
 import { ProductDetailPage } from '../pages/product-detail.page';
 import { CheckoutPage } from '../pages/checkout.page';
 
-test.describe('@INVENTORY TESTCASE', () => {
-    test.describe('Positive Scenario', () => {
+test.describe('@inventory testcase', () => {
+    test.describe('@positive scenario', () => {
 
         test('should display all products and add to cart successfully @smoke', async ({ authenticatedPage, page }) => {
             const inventoryPage = new InventoryPage(page);
@@ -83,9 +83,9 @@ test.describe('@INVENTORY TESTCASE', () => {
 
     });
 
-    test.describe('Negative Scenario', () => {
+    test.describe('@negative scenario', () => {
 
-        test('should display empty cart badge when no items added', async ({ authenticatedPage, page }) => {
+        test('should display empty cart badge when no items added @smoke', async ({ authenticatedPage, page }) => {
             const inventoryPage = new InventoryPage(page);
 
             await inventoryPage.navigateToInventory();
@@ -96,7 +96,7 @@ test.describe('@INVENTORY TESTCASE', () => {
 
 
 
-        test('should verify all products are visible on page load', async ({ authenticatedPage, page }) => {
+        test('should verify all products are visible on page load @smoke', async ({ authenticatedPage, page }) => {
             const inventoryPage = new InventoryPage(page);
 
             await inventoryPage.navigateToInventory();
@@ -115,9 +115,8 @@ test.describe('@INVENTORY TESTCASE', () => {
     });
 });
 
-test.describe('CART TESTCASE', () => {
-
-    test.describe('Positive Scenario', () => {
+test.describe('@cart testcase', () => {
+    test.describe('@positive scenario', () => {
 
         test('should display added products in cart', async ({ authenticatedPage, page }) => {
             const inventoryPage = new InventoryPage(page);
@@ -192,16 +191,16 @@ test.describe('CART TESTCASE', () => {
 
     });
 
-    test.describe('Negative Scenario', () => {
+    test.describe('@negative scenario', () => {
 
-        test('should handle empty cart gracefully', async ({ authenticatedPage, page }) => {
+        test('should handle empty cart gracefully @smoke', async ({ authenticatedPage, page }) => {
             const cartPage = new CartPage(page);
 
             await cartPage.navigateToCart();
             await cartPage.verifyEmptyCart();
         });
 
-        test('should not allow checkout with empty cart', async ({ authenticatedPage, page }) => {
+        test('should not allow checkout with empty cart @smoke', async ({ authenticatedPage, page }) => {
             const cartPage = new CartPage(page);
 
             await cartPage.navigateToCart();
@@ -229,9 +228,8 @@ test.describe('CART TESTCASE', () => {
     });
 });
 
-test.describe('CHECKOUT TESTCASE', () => {
-
-    test.describe('Positive Scenario', () => {
+test.describe('@checkout testcase', () => {
+    test.describe('@positive scenario', () => {
 
         test('should complete checkout successfully', async ({ authenticatedPage, page }) => {
             const inventoryPage = new InventoryPage(page);
@@ -267,13 +265,11 @@ test.describe('CHECKOUT TESTCASE', () => {
             await inventoryPage.goToCart();
             await cartPage.proceedToCheckout();
 
-            // Verify on checkout page
             await expect(page).toHaveURL(/.*checkout-step-one.html/);
 
             await checkoutPage.fillCheckoutInformation('Jane', 'Smith', '54321');
             await checkoutPage.proceedToOrderReview();
 
-            // Verify on review page
             await expect(page).toHaveURL(/.*checkout-step-two.html/);
         });
 
