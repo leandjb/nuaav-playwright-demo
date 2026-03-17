@@ -76,6 +76,11 @@ npx playwright test -g "should login with valid credentials"
 npx playwright test
 npx playwright show-report
 ```
+### Fix expected images for visual tests:
+```
+npx playwright test --update-snapshots
+```
+
 # Design Decisions:
 
 ## Test Pattern Design: 
