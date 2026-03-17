@@ -10,6 +10,7 @@ test.describe('@visual testcase', () => {
       const placeholder = await loginPage.username_textbox.getAttribute('placeholder');
       expect(placeholder).toBeTruthy();
       await expect(loginPage.username_textbox).toHaveAttribute('placeholder', /username|user/i);
+      await expect(loginPage.username_textbox).toHaveScreenshot('username-field-default.png');
     });
 
     test('should display password field with correct placeholder text @smoke', async ({ loginPage }) => {
@@ -18,6 +19,7 @@ test.describe('@visual testcase', () => {
       const placeholder = await loginPage.password_textbox.getAttribute('placeholder');
       expect(placeholder).toBeTruthy();
       await expect(loginPage.password_textbox).toHaveAttribute('placeholder', /password|pass/i);
+      await expect(loginPage.password_textbox).toHaveScreenshot('password-field-default.png');
     });
 
     test('should mask password input characters', async ({ loginPage }) => {
@@ -28,6 +30,7 @@ test.describe('@visual testcase', () => {
 
       const inputType = await loginPage.password_textbox.getAttribute('type');
       expect(inputType).toBe('password');
+      await expect(loginPage.password_textbox).toHaveScreenshot('password-field-masked.png');
     });
 
     test('should display username field with correct input type', async ({ loginPage }) => {
@@ -39,7 +42,6 @@ test.describe('@visual testcase', () => {
     test('should have correct field labels or aria-labels', async ({ loginPage }) => {
       await loginPage.navigateToLoginPage();
 
-      // Check for label or aria-label
       const usernameLabel = await loginPage.username_textbox.getAttribute('aria-label');
       const passwordLabel = await loginPage.password_textbox.getAttribute('aria-label');
 
@@ -84,6 +86,7 @@ test.describe('@visual testcase', () => {
       );
 
       expect(isFocused).toBe(true);
+      await expect(loginPage.username_textbox).toHaveScreenshot('username-field-focused.png');
     });
 
     test('should show focus state on password field', async ({ loginPage }) => {
@@ -95,6 +98,7 @@ test.describe('@visual testcase', () => {
       );
 
       expect(isFocused).toBe(true);
+      await expect(loginPage.password_textbox).toHaveScreenshot('password-field-focused.png');
     });
 
     test('should have distinct visual difference between focused and unfocused state', async ({ loginPage }) => {
@@ -118,6 +122,7 @@ test.describe('@visual testcase', () => {
     test('should display login button with correct text', async ({ loginPage }) => {
       await loginPage.navigateToLoginPage();
       await expect(loginPage.login_button).toContainText(/login|sign in/i);
+      await expect(loginPage.login_button).toHaveScreenshot('login-button-default.png');
     });
 
     test('should display login button as enabled by default', async ({ loginPage }) => {
@@ -174,6 +179,7 @@ test.describe('@visual testcase', () => {
       );
 
       expect(hoverStyle).toBeTruthy();
+      await expect(loginPage.login_button).toHaveScreenshot('login-button-hovered.png');
     });
 
     test('should have cursor change on button hover', async ({ loginPage }) => {
@@ -196,6 +202,7 @@ test.describe('@visual testcase', () => {
 
       const errorText = await loginPage.error_message.textContent();
       expect(errorText).toMatch(/username and password do not match/i);
+      await expect(loginPage.error_message).toHaveScreenshot('error-message-displayed.png');
     });
 
     test('should display error message with proper font size', async ({ loginPage }) => {
@@ -288,8 +295,8 @@ test.describe('@visual testcase', () => {
       const usernameBBox = await loginPage.username_textbox.boundingBox();
       const passwordBBox = await loginPage.password_textbox.boundingBox();
 
-      // Both should have same left alignment
       expect(usernameBBox?.x).toBe(passwordBBox?.x);
+      await expect(loginPage.page).toHaveScreenshot('form-layout-alignment.png');
     });
 
     test('should have consistent spacing between input fields', async ({ loginPage }) => {
